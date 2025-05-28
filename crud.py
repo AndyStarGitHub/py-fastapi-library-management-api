@@ -38,14 +38,14 @@ def get_book_list(
     queryset = db.query(models.DBBook)
 
     if author is not None:
-        queryset = queryset.filter(
+        queryset = queryset.join(models.DBAuthor).filter(
             models.DBAuthor.name.ilike(f"%{author}%")
         )
 
     return queryset.all()
 
 
-def get_book(db: Session, book_id: int) -> List[models.DBBook]:
+def get_book(db: Session, book_id: int) -> models.DBBook:
     return db.query(models.DBBook).filter(models.DBBook.id == book_id).first()
 
 

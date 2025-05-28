@@ -38,7 +38,7 @@ def read_authors(
 def create_author(
     author: schemas.AuthorCreate,
     db: Session = Depends(get_db)
-) -> models.DBAuthor:
+) -> schemas.Author:
     db_author = crud.get_author_by_name(db, name=author.name)
     if db_author:
         raise HTTPException(
@@ -82,7 +82,7 @@ def read_single_book(
 def create_book(
     book: schemas.BookCreate,
     db: Session = Depends(get_db),
-) -> models.DBBook:
+) -> schemas.Book:
     if isinstance(book.publication_date, int):
         book.publication_date = datetime.utcfromtimestamp(
             book.publication_date / 1000).date()
