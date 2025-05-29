@@ -6,7 +6,6 @@ from fastapi_pagination import Page, add_pagination, paginate, Params
 
 import crud
 import schemas
-from db import models
 from db.engine import SessionLocal
 
 app = FastAPI()
@@ -75,7 +74,7 @@ def read_single_book(
             detail="Book not found"
         )
 
-    return db_book
+    return schemas.Book.from_orm(db_book)
 
 
 @app.post("/books/", response_model=schemas.Book)
@@ -83,8 +82,4 @@ def create_book(
     book: schemas.BookCreate,
     db: Session = Depends(get_db),
 ) -> schemas.Book:
-    if isinstance(book.publication_date, int):
-        book.publication_date = datetime.utcfromtimestamp(
-            book.publication_date / 1000).date()
-
-    return crud.create_book(db=db, book=book)
+    return schemas.Book.from_orm(crud.create_book(db=db, book=book))

@@ -17,7 +17,7 @@ class Author(AuthorBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class BookBase(BaseModel):
@@ -26,15 +26,11 @@ class BookBase(BaseModel):
     publication_date: date
 
 
-# class BookCreate(BookBase):
-#     author_id: int
-#     title: str
-#     summary: str
-#     publication_date: date
-
 class BookCreate(BaseModel):
     title: str
     publication_date: date | int
+    author_id: int
+    summary: str
 
     @validator("publication_date", pre=True)
     def parse_publication_date(cls, value):
@@ -48,4 +44,4 @@ class Book(BookBase):
     author: Author
 
     class Config:
-        orm_mode = True
+        from_attributes = True
